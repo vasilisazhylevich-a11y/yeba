@@ -39,7 +39,7 @@ class BattleResult
         return $data;
     }
 
-// Геттеры (опционально)
+
     public function getPlayerDamage(): int
     {
         return $this->playerDamage;
