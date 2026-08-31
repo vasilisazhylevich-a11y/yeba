@@ -38,7 +38,7 @@ if (isset($_GET['name']) && isset($_GET['race']) && !isset($_SESSION['hero'])) {
     header('Location: fight.php');
     exit;
 
-    }
+}
 
 $hero = $_SESSION['hero'] ?? null;
 $mob = $_SESSION['mob'] ?? null;
@@ -55,18 +55,37 @@ if (isset($_GET['action'])) {
     exit;
 
 }
+$heroImage = '';
+if ($hero instanceof Human) {
+    $heroImage = 'человек.jpg';
+} elseif ($hero instanceof Ork) {
+    $heroImage = 'орк.jpg';
+} elseif ($hero instanceof Elf) {
+    $heroImage = 'эльф.jpg';
+}
+$mobImage = str_replace([':', ' '], '', $mob->getName()) . '.jpg';
+
+
+
 ?>
 <!DOCTYPE html>
 <html>
 <head>
     <head> fight </head>
     <style>
-        /*стили
+        .avatar {
+            width: 150px;
+            height: 150px;
+            border: 2px solid #693333;
+            margin-right: 15px;
+            vertical-align: middle;
+        }
     </style>
 </head>
 <body>
 <h1>В Бой!</h1>
 <div class="hero-info">
+    <img src="images/<?= $heroImage ?>" alt="<?= $hero->getName() ?>" class="avatar">
     <h2><?= $hero->getName() ?> <?= $hero->getRace() ?>  (Уровень персонажа: <?= $hero->lvl() ?>)</h2>
     <div class="hp-bar">
         <div style="width: <?= ($hero->hp() / $hero->maxHp()) * 100 ?>%"></div>
@@ -74,6 +93,7 @@ if (isset($_GET['action'])) {
     <span><?= $hero->hp() ?> / <?= $hero->maxHp() ?></span>
 </div>
 <div class="mob-info">
+    <img src="images/<?= $mobImage ?>" alt="<?= $mob->getName() ?>" class="avatar">
     <h2><?= $mob->getName() ?> (Уровень: <?= $mob->lvl() ?>)</h2>
     <div class="hp-bar">
         <div style="width: <?= ($mob->hp() / $mob->maxHp()) * 100 ?>%"></div>
@@ -83,17 +103,17 @@ if (isset($_GET['action'])) {
 
 <div class="actions">
     <?php if ($hero->isAlive()): ?>
-    <?php if ($hero instanceof Human):?>
-        <a href="?action=Удар">Удар</a>
-        <a href="?action=Блок">Блок</a>
-    <?php endif; ?>
-    <?php if ($hero instanceof Elf):?>
-        <a href="?action=Удар ножом">Удар ножом</a>
-        <a href="?action=Выстрел из лука">Выстрел из лука</a>
-    <?php endif; ?>
-    <?php if ($hero instanceof Ork):?>
-        <a href="?action=Удар">Удар</a>
-    <?php endif; ?>
+        <?php if ($hero instanceof Human):?>
+            <a href="?action=Удар">Удар</a>
+            <a href="?action=Блок">Блок</a>
+        <?php endif; ?>
+        <?php if ($hero instanceof Elf):?>
+            <a href="?action=Удар ножом">Удар ножом</a>
+            <a href="?action=Выстрел из лука">Выстрел из лука</a>
+        <?php endif; ?>
+        <?php if ($hero instanceof Ork):?>
+            <a href="?action=Удар">Удар</a>
+        <?php endif; ?>
     <?php endif; ?>
 </div>
 <div class="result">
